@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../mixins/validation_mixins.dart';
 
 class LoginScreen extends StatefulWidget {
   createState() {
@@ -6,9 +7,11 @@ class LoginScreen extends StatefulWidget {
   }
 }
 
-class LoginScreenState extends State<LoginScreen> {
+class LoginScreenState extends State<LoginScreen> with ValidationMixins {
   final formKey = GlobalKey<FormState>();
   bool passwordVisible = false;
+  String emailValue = "";
+  String passwordValue = "";
 
   Widget build(context) {
     return Container(
@@ -34,11 +37,8 @@ class LoginScreenState extends State<LoginScreen> {
         hintText: 'youremail@company.com',
       ),
       keyboardType: TextInputType.emailAddress,
-      validator: (dynamic value) {
-        if (!value.contains("@")) {
-          return "Email not valid";
-        }
-      },
+      validator: validateEmail,
+      onSaved: (dynamic value) => {emailValue = value},
     );
   }
 
@@ -57,17 +57,22 @@ class LoginScreenState extends State<LoginScreen> {
           }),
         ),
       ),
-      validator: (dynamic value) {
-        if (value.length < 8) {
-          return "Password not valid";
-        }
-      },
+      validator: validatorPassword,
+      onSaved: (dynamic value) => {passwordValue = value},
     );
   }
 
   Widget submitButton() {
     return ElevatedButton(
-      onPressed: () => {print(formKey.currentState?.validate())},
+      onPressed: () => {
+        if (formKey.currentState?.validate() != null &&
+            formKey.currentState?.validate() != false)
+          {
+            print(formKey.currentState?.validate()),
+            formKey.currentState?.save(),
+            print('Current User $emailValue and his pass $passwordValue')
+          }
+      },
       child: Text('Submit'),
     );
   }
