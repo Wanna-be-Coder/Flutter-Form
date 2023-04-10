@@ -1,11 +1,11 @@
 class ValidationMixins {
-  String? validateEmail(dynamic value) {
+  String? validateEmail(String value) {
     if (!value.contains("@")) {
       return "Email not valid";
     }
   }
 
-  String? validatorPassword(dynamic value) {
+  String? validatorPassword(String value) {
     if (value.length < 8) {
       return "Password not valid";
     }

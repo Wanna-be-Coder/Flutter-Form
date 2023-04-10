@@ -1,79 +1,61 @@
 import 'package:flutter/material.dart';
-import '../mixins/validation_mixins.dart';
+import '../blocs/bloc.dart';
 
-class LoginScreen extends StatefulWidget {
-  createState() {
-    return LoginScreenState();
-  }
-}
+class LoginScreen extends StatelessWidget {
+  final TextEditingController _controller = TextEditingController();
 
-class LoginScreenState extends State<LoginScreen> with ValidationMixins {
-  final formKey = GlobalKey<FormState>();
-  bool passwordVisible = false;
-  String emailValue = "";
-  String passwordValue = "";
+  LoginScreen({super.key});
 
+  @override
   Widget build(context) {
     return Container(
-      margin: EdgeInsets.all(100),
-      child: Form(
-        key: formKey,
+        margin: const EdgeInsets.all(20),
         child: Column(
           children: [
             emailField(),
-            password(),
-            Container(margin: EdgeInsets.only(bottom: 25)),
+            passwordField(),
             submitButton(),
           ],
-        ),
-      ),
-    );
+        ));
   }
 
   Widget emailField() {
-    return TextFormField(
-      decoration: InputDecoration(
-        labelText: 'Email:',
-        hintText: 'youremail@company.com',
-      ),
-      keyboardType: TextInputType.emailAddress,
-      validator: validateEmail,
-      onSaved: (dynamic value) => {emailValue = value},
+    return StreamBuilder(
+      stream: bloc.email,
+      builder: (context, snapshot) {
+        return TextField(
+          keyboardType: TextInputType.emailAddress,
+          onChanged: bloc.changeEmail,
+          decoration: InputDecoration(
+            hintText: 'your@company.com',
+            labelText: 'Email:',
+            errorText: snapshot.error?.toString(),
+          ),
+        );
+      },
     );
   }
 
-  Widget password() {
-    return TextFormField(
-      obscureText: !passwordVisible,
-      enableInteractiveSelection: true,
-      decoration: InputDecoration(
-        labelText: 'Password:',
-        hintText: '********',
-        suffixIcon: IconButton(
-          icon:
-              Icon(!passwordVisible ? Icons.visibility_off : Icons.visibility),
-          onPressed: () => setState(() {
-            passwordVisible = !passwordVisible;
-          }),
-        ),
-      ),
-      validator: validatorPassword,
-      onSaved: (dynamic value) => {passwordValue = value},
-    );
+  Widget passwordField() {
+    return StreamBuilder(
+        stream: bloc.pass,
+        builder: (context, snapshopt) {
+          return TextField(
+            keyboardType: TextInputType.visiblePassword,
+            onChanged: bloc.changePass,
+            decoration: InputDecoration(
+              hintText: '********',
+              labelText: 'Password:',
+              errorText: snapshopt.error?.toString(),
+            ),
+          );
+        });
   }
 
   Widget submitButton() {
     return ElevatedButton(
-      onPressed: () => {
-        if (formKey.currentState?.validate() != null &&
-            formKey.currentState?.validate() != false)
-          {
-            print(formKey.currentState?.validate()),
-            formKey.currentState?.save(),
-            print('Current User $emailValue and his pass $passwordValue')
-          }
-      },
-      child: Text('Submit'),
+      onPressed: () {},
+      child: Text('Login'),
     );
   }
 }
