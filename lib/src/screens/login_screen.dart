@@ -15,14 +15,14 @@ class LoginScreenState extends State<LoginScreen> with ValidationMixins {
 
   Widget build(context) {
     return Container(
-      margin: EdgeInsets.all(100),
+      margin: const EdgeInsets.all(100),
       child: Form(
         key: formKey,
         child: Column(
           children: [
             emailField(),
             password(),
-            Container(margin: EdgeInsets.only(bottom: 25)),
+            Container(margin: const EdgeInsets.only(bottom: 25)),
             submitButton(),
           ],
         ),
@@ -32,7 +32,7 @@ class LoginScreenState extends State<LoginScreen> with ValidationMixins {
 
   Widget emailField() {
     return TextFormField(
-      decoration: InputDecoration(
+      decoration: const InputDecoration(
         labelText: 'Email:',
         hintText: 'youremail@company.com',
       ),
