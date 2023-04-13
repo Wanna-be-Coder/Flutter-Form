@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-// import '../blocs/bloc.dart';
+// import 'package:form_validation/src/blocs/bloc.dart';
+import '../blocs/bloc.dart';
 import '../blocs/provider.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -9,12 +10,17 @@ class LoginScreen extends StatelessWidget {
   Widget build(context) {
     final bloc = Provider.of(context);
     return Container(
-        margin: const EdgeInsets.all(20),
+        margin: const EdgeInsets.all(20.0),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             emailField(bloc),
             passwordField(bloc),
-            submitButton(),
+            Container(
+              margin: const EdgeInsets.only(top: 20),
+            ),
+            submitButton(bloc),
           ],
         ));
   }
@@ -52,10 +58,14 @@ class LoginScreen extends StatelessWidget {
         });
   }
 
-  Widget submitButton() {
-    return ElevatedButton(
-      onPressed: () {},
-      child: Text('Login'),
-    );
+  Widget submitButton(Bloc blocs) {
+    return StreamBuilder(
+        stream: blocs.submitValid,
+        builder: (context, snapshot) {
+          return ElevatedButton(
+            onPressed: !snapshot.hasData ? null : blocs.submit,
+            child: const Text('Login'),
+          );
+        });
   }
 }

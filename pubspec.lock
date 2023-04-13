@@ -123,6 +123,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.8.2"
+  rxdart:
+    dependency: "direct dev"
+    description:
+      name: rxdart
+      sha256: "8f4130f950f368c458ac082de889fc5bf307d26928e3f91910428dbd5c9f7e0d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.18.1"
   sky_engine:
     dependency: transitive
     description: flutter
